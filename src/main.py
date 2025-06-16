@@ -54,19 +54,26 @@ def generate_heatmap_data(weather_data, selected_factor, num_points=500):
     
     np.random.seed(42)
     
-    # Definir limites para Manaus (aproximadamente)
-    lat_min, lat_max = MANAUS_LAT - 0.15, MANAUS_LAT + 0.15
-    lon_min, lon_max = MANAUS_LON - 0.15, MANAUS_LON + 0.15
+    # Definir limites usando as coordenadas fornecidas
+    # Assumindo que o primeiro valor em cada par é a coordenada relevante
+    lat_min = -3.157431
+    lat_max = -2.950733
+    lon_min = -60.110890
+    lon_max = -59.877197
     
-    # Gerar coordenadas aleatórias
+    # Coordenada de base fornecida
+    BASE_LAT = -3.1190
+    BASE_LON = -60.0217
+    
+    # Gerar coordenadas aleatórias dentro dos novos limites
     lats = np.random.uniform(lat_min, lat_max, num_points)
     lons = np.random.uniform(lon_min, lon_max, num_points)
     
     values = []
     
     for lat, lon in zip(lats, lons):
-        # Calcular distância do centro (simplificada)
-        dist = ((lat - MANAUS_LAT) ** 2 + (lon - MANAUS_LON) ** 2) ** 0.5
+        # Calcular distância da coordenada de base
+        dist = ((lat - BASE_LAT) ** 2 + (lon - BASE_LON) ** 2) ** 0.5
         
         # Áreas mais próximas do centro são mais quentes (ilha de calor)
         # Quanto menor a distância, maior o valor (para temperatura)
@@ -90,7 +97,6 @@ def generate_heatmap_data(weather_data, selected_factor, num_points=500):
     })
     
     return heatmap_data
-
 # Função para identificar locais potenciais para intervenções sustentáveis
 def identify_intervention_locations(heatmap_data, factor='temp', threshold_percentile=90):
     # Para temperatura, queremos os locais mais quentes
