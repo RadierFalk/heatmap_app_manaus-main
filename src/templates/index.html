@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapeamento de Ilhas de Calor em Manaus</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .header {
+            background: linear-gradient(135deg, #43a047, #1b5e20);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .map-container {
+            height: 500px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        .form-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        .info-box {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        .btn-primary {
+            background-color: #43a047;
+            border-color: #43a047;
+        }
+        .btn-primary:hover {
+            background-color: #2e7d32;
+            border-color: #2e7d32;
+        }
+        .feature-icon {
+            font-size: 2rem;
+            color: #43a047;
+            margin-bottom: 1rem;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 1.5rem 0;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1><i class="fas fa-leaf"></i> Mapeamento de Ilhas de Calor em Manaus</h1>
+            <p class="lead">Identificação de locais estratégicos para intervenções sustentáveis</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="map-container">
+                    {{ map_html|safe }}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-container">
+                    <h3>Gerar Mapa de Calor</h3>
+                    <form action="/generate_heatmap" method="post">
+                        <div class="mb-3">
+                            <label for="start_date" class="form-label">Data Inicial:</label>
+                            <input type="date" class="form-control" id="start_date" name="start_date" value="{{ start_date }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="end_date" class="form-label">Data Final:</label>
+                            <input type="date" class="form-control" id="end_date" name="end_date" value="{{ end_date }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="factor" class="form-label">Fator Ambiental:</label>
+                            <select class="form-select" id="factor" name="factor">
+                                <option value="temp">Temperatura</option>
+                                <option value="humidity">Umidade</option>
+                                <option value="precipitation">Precipitação</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Gerar Mapa</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="info-box">
+                    <div class="feature-icon"><i class="fas fa-thermometer-half"></i></div>
+                    <h4>Ilhas de Calor Urbanas</h4>
+                    <p>Áreas urbanas que apresentam temperaturas mais elevadas em comparação com regiões vizinhas menos urbanizadas, devido à substituição da vegetação por concreto e asfalto.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="info-box">
+                    <div class="feature-icon"><i class="fas fa-seedling"></i></div>
+                    <h4>Jardins Verticais</h4>
+                    <p>Estruturas que permitem o cultivo de plantas em superfícies verticais, como paredes e muros, contribuindo para a redução da temperatura e melhoria da qualidade do ar.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="info-box">
+                    <div class="feature-icon"><i class="fas fa-home"></i></div>
+                    <h4>Telhados Verdes</h4>
+                    <p>Coberturas de edificações parcial ou totalmente cobertas por vegetação, que ajudam a reduzir a temperatura interna, melhorar o isolamento térmico e gerenciar águas pluviais.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="info-box">
+                    <h3>Sobre o Projeto</h3>
+                    <p>Esta aplicação web utiliza dados meteorológicos e técnicas de visualização geoespacial para identificar ilhas de calor em Manaus, Amazonas. O objetivo é mapear áreas críticas onde intervenções sustentáveis, como jardins verticais e telhados verdes, podem ser implementadas para mitigar os efeitos das ilhas de calor urbanas.</p>
+                    <p>A ferramenta permite a análise de diferentes períodos e fatores ambientais, como temperatura, umidade e precipitação, fornecendo uma visão abrangente das condições climáticas locais e identificando locais estratégicos para intervenções.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>&copy; 2025 Mapeamento de Ilhas de Calor em Manaus</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <p>Desenvolvido com <i class="fas fa-heart"></i> para um futuro sustentável</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
