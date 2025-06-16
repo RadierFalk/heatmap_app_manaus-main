@@ -25,7 +25,7 @@ def get_weather_data(start_date, end_date, factor='temp'):
     if factor == 'humidity':
         data = Hourly(manaus, start_date, end_date)
         data = data.fetch()
-        data = data.resample('D').mean()  # Faz a média diária
+        data = data.resample('D').mean()
         selected_factor = 'rhum'
     elif factor == 'temp':
         data = Daily(manaus, start_date, end_date)
